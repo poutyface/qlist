@@ -9,7 +9,7 @@ You know, Queue performs enqueue and dequeue. It's a queue. And ...
 Sometimes, you want pushback(unshift) queue items on reciever side. 
 qlist is able to this.
 
-Queue is used to command queue in a thread system. 
+Queue is used to be a command queue in a thread system. 
 You always check whether queue has items or you will implement monitor or condition signal/wait.
 But I wish that queue is file descriptor(FD). if queue is FD, I am able to use 
 select, poll or epoll. WAIT! that is able to use pipe, mkfifo, socketpair or message queue(IPC).
