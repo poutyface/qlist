@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+#ifndef NFD
+#include <unistd.h>
+#include <errno.h>
+#endif
+
 struct qitem{
   struct qitem *next;
 };
@@ -13,6 +18,9 @@ typedef struct Qlist{
   struct qitem *first, *last;
   unsigned int size;
   pthread_mutex_t mutex;
+#ifndef NFD
+  int fd[2];
+#endif
 }Qlist;
 
 

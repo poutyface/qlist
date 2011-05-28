@@ -11,19 +11,56 @@ Qlist* Qlist_create()
   if(rc != 0)
     return NULL;
 
+#ifndef NFD
+  rc = pipe(q->fd);
+  if(rc != 0)
+    return NULL;
+#endif  
+
   return q;
 }
 
 
 void Qlist_destroy(Qlist *q)
 {
+#ifndef NFD
+  close(q->fd[0]);
+  close(q->fd[1]);
+#endif
   pthread_mutex_destroy(&q->mutex);
   free(q);
 }
 
 
+#ifndef NFD
+static void qlist_write_fd(Qlist *q)
+{
+  int rc;
+  unsigned char m = '.';
+  while(1){
+    rc = write(q->fd[1], &m, sizeof(m));
+    if(rc != 1) continue;
+    break;
+  }
+}
+
+
+static void qlist_read_fd(Qlist *q)
+{
+  int rc;
+  unsigned char m;
+  while(1){
+    rc = read(q->fd[0], &m, sizeof(m));
+    if(rc != 1) continue;
+    break;
+  }
+}
+#endif
+
+
 void Qlist_enq(Qlist *q, void *item)
 {
+
   pthread_mutex_lock(&q->mutex);
 
   if(q->first == NULL){
@@ -36,6 +73,10 @@ void Qlist_enq(Qlist *q, void *item)
 
   q->last->next = NULL;
   q->size++;
+
+#ifndef NFD
+  qlist_write_fd(q);
+#endif
 
   pthread_mutex_unlock(&q->mutex);
 }
@@ -54,6 +95,9 @@ void* Qlist_deq(Qlist *q)
     tmp = q->first;
     q->first = q->first->next;
     q->size--;
+#ifndef NFD
+    qlist_read_fd(q);
+#endif
   }
 
   pthread_mutex_unlock(&q->mutex);
@@ -79,6 +123,11 @@ void Qlist_unshift(Qlist *q, void *item)
   }
 
   q->size++;
+
+#ifndef NFD
+  qlist_write_fd(q);
+#endif
+
   pthread_mutex_unlock(&q->mutex);
 }
 
