@@ -69,8 +69,8 @@ int main()
 
     for(i=0; i<3; ++i){
       FD_ZERO(&fds);
-      FD_SET(q->fd[0], &fds);     // q->fd[0] is qlist's reader FD.
-      n = select(q->fd[0]+1, &fds, NULL, NULL, NULL);
+      FD_SET(q->fd.r, &fds);     // q->fd[0] is qlist's reader FD.
+      n = select(q->fd.r+1, &fds, NULL, NULL, NULL);
       if(n > 0)
         Qlist_deq(q);
     }

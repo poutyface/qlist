@@ -19,7 +19,10 @@ typedef struct Qlist{
   unsigned int size;
   pthread_mutex_t mutex;
 #ifndef NFD
-  int fd[2];
+  struct fds{
+    int r;
+    int w;
+  }fd;
 #endif
 }Qlist;
 
