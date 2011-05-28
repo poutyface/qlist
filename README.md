@@ -19,7 +19,7 @@ But you remove this feature by compile option(make OPTS='-DNFD'), it works like 
 
 Example
 =======
-`
+~~~~
 // you have to set *struct qitem* to your queue item structe. 
 typedef struct Item{
  struct qitem item;     // <- *THIS*
@@ -81,7 +81,7 @@ int main()
 
   return 0;
 }
-`
+~~~~
 
 learn more ... to see test/function_test.c
 
