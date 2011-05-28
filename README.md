@@ -1,6 +1,6 @@
 qlist is a queue with FD. 
 
-When I want a queue in C, there are not proper queue librarys.
+When I want a queue in C, there are not proper queue libraries.
 Then I always write and rewrite a queue for some system's suit. It's boring me!
 
 
