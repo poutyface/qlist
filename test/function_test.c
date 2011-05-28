@@ -57,6 +57,27 @@ int main()
   rc = Qlist_size(q);
   check(rc == 0, "Qlist_size != 0");
 
+#ifndef NFD
+  {
+    int i, n;
+    fd_set fds;
+    
+    Qlist_enq(q, &item1);
+    Qlist_enq(q, &item2);
+    Qlist_enq(q, &item3);
+
+    for(i=0; i<3; ++i){
+      FD_ZERO(&fds);
+      FD_SET(q->fd[0], &fds);
+      n = select(q->fd[0]+1, &fds, NULL, NULL, NULL);
+      if(n > 0)
+        Qlist_deq(q);
+      else
+        goto error;
+    }
+  }
+#endif
+
   Qlist_destroy(q);
   return 0;
 
