@@ -10,10 +10,10 @@ Sometimes, you want pushback(unshift) queue items on reciever side.
 qlist is able to this.
 
 Queue is used to command queue in a thread system. 
-You always check whether queue has items or implements monitor or condition signal/wait.
+You always check whether queue has items or you will implement monitor or condition signal/wait.
 But I wish that queue is file descriptor(FD). if queue is FD, I am able to use 
-select, poll or epoll. WAIT! that is able to use pipe, socketpair or message queue(IPC).
-But pipe/socketpair/message are not able to pushback easily.
+select, poll or epoll. WAIT! that is able to use pipe, mkfifo, socketpair or message queue(IPC).
+But these are not able to pushback easily.
 qlist has FD (backend is pipe) and is able to pushback. 
 But you remove this feature by compile option(make OPTS='-DNFD'), it works like a normal queue.
 
@@ -24,7 +24,7 @@ Example
 typedef struct Item{
  struct qitem item;     // <- *THIS*
  int number;            
-};
+}Item;
 
 
 int main()
