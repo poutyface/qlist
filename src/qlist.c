@@ -12,7 +12,7 @@ Qlist* Qlist_create()
     return NULL;
 
 #ifndef NFD
-  rc = pipe(q->fd);
+  rc = pipe((int*)&q->fd);
   if(rc != 0)
     return NULL;
 #endif  
@@ -24,8 +24,8 @@ Qlist* Qlist_create()
 void Qlist_destroy(Qlist *q)
 {
 #ifndef NFD
-  close(q->fd[0]);
-  close(q->fd[1]);
+  close(q->fd.r);
+  close(q->fd.w);
 #endif
   pthread_mutex_destroy(&q->mutex);
   free(q);
@@ -38,7 +38,7 @@ static void qlist_write_fd(Qlist *q)
   int rc;
   unsigned char m = '.';
   while(1){
-    rc = write(q->fd[1], &m, sizeof(m));
+    rc = write(q->fd.w, &m, sizeof(m));
     if(rc != 1) continue;
     break;
   }
@@ -50,7 +50,7 @@ static void qlist_read_fd(Qlist *q)
   int rc;
   unsigned char m;
   while(1){
-    rc = read(q->fd[0], &m, sizeof(m));
+    rc = read(q->fd.r, &m, sizeof(m));
     if(rc != 1) continue;
     break;
   }
