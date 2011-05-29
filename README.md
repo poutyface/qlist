@@ -30,69 +30,68 @@ make OPTS='-DNFD'
 
 Example
 =======
-~~~~
-// you have to set *struct qitem* to your queue item structe. 
-typedef struct Item{
- struct qitem item;     // <- *THIS*
- int number;            
-}Item;
+
+    // you have to set *struct qitem* to your queue item structe. 
+    typedef struct Item{
+      struct qitem item;     // <- *THIS*
+      int number;            
+    }Item;
 
 
-int main()
-{
-  Qlist *q;
-  int rc;
-  Item item1, item2, item3;
-  Item *item;
+    int main()
+    {
+       Qlist *q;
+       int rc;
+       Item item1, item2, item3;
+       Item *item;
 
-  item1.number = 1;
-  item2.number = 2;
-  item3.number = 3;
+       item1.number = 1;
+       item2.number = 2;
+       item3.number = 3;
 
-  // create queue 
-  q = Qlist_create();
+       // create queue 
+       q = Qlist_create();
   
-  // enqueue items
-  Qlist_enq(q, &item1);
-  Qlist_enq(q, &item2);
-  Qlist_enq(q, &item3);
-  // pushback(unshift) item
-  Qlist_unshift(q, &item3);
+       // enqueue items
+       Qlist_enq(q, &item1);
+       Qlist_enq(q, &item2);
+       Qlist_enq(q, &item3);
+       // pushback(unshift) item
+       Qlist_unshift(q, &item3);
 
-  // check queue size
-  rc = Qlist_size(q);  // rc == 4
+       // Check queue size
+       rc = Qlist_size(q);  // rc == 4
 
-  // dequeue items
-  item = Qlist_deq(q);  // item == &item3  it was unshifted item
-  item = Qlist_deq(q);  // item == &item1
-  item = Qlist_deq(q);  // item == &item2
-  item = Qlist_deq(q);  // item == &item3
-  item = Qlist_deq(q);  // item == NULL
+       // dequeue items
+       item = Qlist_deq(q);  // item == &item3  it was unshifted item
+       item = Qlist_deq(q);  // item == &item1
+       item = Qlist_deq(q);  // item == &item2
+       item = Qlist_deq(q);  // item == &item3
+       item = Qlist_deq(q);  // item == NULL
   
-  // wait by calling select
-  {
-    int i, n;
-    fd_set fds;
-    
-    Qlist_enq(q, &item1);
-    Qlist_enq(q, &item2);
-    Qlist_enq(q, &item3);
+       // wait by calling select
+       {
+          int i, n;
+          fd_set fds;
+  
+          Qlist_enq(q, &item1);
+          Qlist_enq(q, &item2);
+          Qlist_enq(q, &item3);
 
-    for(i=0; i<3; ++i){
-      FD_ZERO(&fds);
-      FD_SET(q->fd.r, &fds);     // q->fd[0] is qlist's reader FD.
-      n = select(q->fd.r+1, &fds, NULL, NULL, NULL);
-      if(n > 0)
-        Qlist_deq(q);
+          for(i=0; i<3; ++i){
+            FD_ZERO(&fds);
+            FD_SET(q->fd.r, &fds);     // q->fd[0] is qlist's reader FD.
+            n = select(q->fd.r+1, &fds, NULL, NULL, NULL);
+            if(n > 0)
+              Qlist_deq(q);
+          }
+        }
+
+      // delete queue
+      Qlist_destroy(q);
+
+      return 0;
     }
-  }
-
-  // delete queue
-  Qlist_destroy(q);
-
-  return 0;
-}
-~~~~
 
 learn more ... to see test/function_test.c
 
