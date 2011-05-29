@@ -17,6 +17,17 @@ But these are not able to pushback easily.
 qlist has FD (backend is pipe) and is able to pushback. 
 But you remove this feature by compile option(make OPTS='-DNFD'), it works like a normal queue.
 
+Build
+=====
+
+make 
+
+library created at build/qlist.a
+
+if you want remove FD feature
+make OPTS='-DNFD'
+
+
 Example
 =======
 ~~~~
