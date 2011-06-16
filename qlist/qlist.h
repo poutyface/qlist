@@ -27,16 +27,16 @@ typedef struct Qlist{
 }Qlist;
 
 
-Qlist* Qlist_create();
+Qlist* qlist_create();
 
-void Qlist_enq(Qlist *q, void *item);
+void qlist_enq(Qlist *q, void *item);
 
-void* Qlist_deq(Qlist *q);
+void* qlist_deq(Qlist *q);
 
-void Qlist_unshift(Qlist *q, void *item);
+void qlist_unshift(Qlist *q, void *item);
 
-unsigned int Qlist_size(Qlist *q);
+unsigned int qlist_size(Qlist *q);
 
-void Qlist_destroy(Qlist *q);
+void qlist_destroy(Qlist *q);
 
 #endif

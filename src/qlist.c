@@ -1,6 +1,6 @@
 #include "qlist.h"
 
-Qlist* Qlist_create()
+Qlist* qlist_create()
 {
   int rc;
   Qlist *q = (Qlist*)calloc(1, sizeof(Qlist));
@@ -21,7 +21,7 @@ Qlist* Qlist_create()
 }
 
 
-void Qlist_destroy(Qlist *q)
+void qlist_destroy(Qlist *q)
 {
 #ifndef NFD
   close(q->fd.r);
@@ -58,7 +58,7 @@ static void qlist_read_fd(Qlist *q)
 #endif
 
 
-void Qlist_enq(Qlist *q, void *item)
+void qlist_enq(Qlist *q, void *item)
 {
 
   pthread_mutex_lock(&q->mutex);
@@ -82,7 +82,7 @@ void Qlist_enq(Qlist *q, void *item)
 }
 
 
-void* Qlist_deq(Qlist *q)
+void* qlist_deq(Qlist *q)
 {
   struct qitem *tmp;
 
@@ -106,7 +106,7 @@ void* Qlist_deq(Qlist *q)
 }
 
 
-void Qlist_unshift(Qlist *q, void *item)
+void qlist_unshift(Qlist *q, void *item)
 {
   struct qitem *tmp;
 
@@ -132,7 +132,7 @@ void Qlist_unshift(Qlist *q, void *item)
 }
 
 
-unsigned int Qlist_size(Qlist *q)
+unsigned int qlist_size(Qlist *q)
 {
   unsigned int size;
   pthread_mutex_lock(&q->mutex);
